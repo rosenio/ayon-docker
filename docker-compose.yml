@@ -1,3 +1,4 @@
+
 services:
   postgres:
     image: postgres:15
@@ -29,9 +30,8 @@ services:
       retries: 5
 
     expose: [6379]
-
-
   server:
+
     image: ynput/ayon:latest
     restart: unless-stopped
     healthcheck:
@@ -46,18 +46,12 @@ services:
       redis:
         condition: service_started
 
+    environment:
+      - AYON_POSTGRES_URL = "postgresql://root:wJXBAjqiBoDJeflmha26zzOI0miGxoYF@dpg-curpd6dumphs73bf2i2g-a.oregon-postgres.render.com/postgres_ayon"
+      - AYON_REDIS_URL = "redis://red-curpqjtds78s73cii3ig:6379"
+      - AYON_API_KEY = "13555f11e5d74bb7ab8d1d0785f224d1"
     expose: [5000]
     ports: ["5000:5000"]
-
-    volumes:
-      - "./addons:/addons"
-      - "./storage:/storage"
-
-      # comment out the following line on Windows
-      - "/etc/localtime:/etc/localtime:ro"
-
-      # uncomment the following line if you need to work on the backend code
-      # - "./backend:/backend"
 
 volumes:
   db: {}

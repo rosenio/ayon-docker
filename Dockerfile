@@ -1,6 +1,7 @@
 FROM python:3.11-slim AS build-ffmpeg
 ENV FFMPEG_VERSION=7.1
 
+
 RUN apt-get update && apt-get install -y \
     autoconf \
     automake \
@@ -17,6 +18,8 @@ RUN apt-get update && apt-get install -y \
     zlib1g-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p addons storage
 
 WORKDIR /src
 RUN \
@@ -107,6 +110,7 @@ COPY ./backend/api /backend/api
 COPY ./RELEAS[E] /backend/RELEASE
 
 COPY --from=build-frontend /frontend/dist/ /frontend
+
 
 RUN sh -c 'date +%y%m%d%H%M > /backend/BUILD_DATE'
 

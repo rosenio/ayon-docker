@@ -1,0 +1,4 @@
+DB   = postgres_ayon
+PASS = wJXBAjqiBoDJeflmha26zzOI0miGxoYF
+DB_URL = postgresql://root:wJXBAjqiBoDJeflmha26zzOI0miGxoYF@dpg-curpd6dumphs73bf2i2g-a.oregon-postgres.render.com/postgres_ayon
+PGPASSWORD=wJXBAjqiBoDJeflmha26zzOI0miGxoYF psql -h dpg-curpd6dumphs73bf2i2g-a.oregon-postgres.render.com -U root postgres_ayon
