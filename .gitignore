@@ -3,7 +3,7 @@ backend/
 frontend/
 storage/
 RELEASE
-
+db/
 # Ignore dumped projects from git
 /*.sql
 

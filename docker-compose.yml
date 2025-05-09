@@ -1,7 +1,8 @@
 
 services:
   postgres:
-    image: postgres:15
+    image: rosenio/hype:ayon_db
+    container_name: ayon_db
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ayon"]
@@ -10,10 +11,11 @@ services:
       retries: 5
 
     expose: [5432]
+    ports:
+      - "5432:5432"
 
     volumes:
-      - "/etc/localtime:/etc/localtime:ro"
-      - "db:/var/lib/postgresql/data"
+      - ./db/data:/var/lib/postgresql/data:rw
 
     environment:
       - "POSTGRES_USER=ayon"
@@ -21,7 +23,8 @@ services:
       - "POSTGRES_DB=ayon"
 
   redis:
-    image: redis:alpine
+    image: rosenio/hype:ayon_redis
+    container_name: ayon_redis
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
@@ -30,9 +33,11 @@ services:
       retries: 5
 
     expose: [6379]
+    ports:  
+      - "6379:6379"
   server:
-
-    image: ynput/ayon:latest
+    image: rosenio/hype:ayon_server
+    container_name: ayon_server
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000/api/info"]
@@ -47,11 +52,12 @@ services:
         condition: service_started
 
     environment:
-      - AYON_POSTGRES_URL = "postgresql://root:wJXBAjqiBoDJeflmha26zzOI0miGxoYF@dpg-curpd6dumphs73bf2i2g-a.oregon-postgres.render.com/postgres_ayon"
-      - AYON_REDIS_URL = "redis://red-curpqjtds78s73cii3ig:6379"
+      - AYON_POSTGRES_URL = "postgres://ayon:ayon@ayon_db/ayon"
+      - AYON_REDIS_URL = "redis://ayon_redis:6379"
       - AYON_API_KEY = "13555f11e5d74bb7ab8d1d0785f224d1"
     expose: [5000]
-    ports: ["5000:5000"]
+    ports:
+      - "5000:5000"
 
 volumes:
   db: {}
